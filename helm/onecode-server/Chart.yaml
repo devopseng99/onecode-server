@@ -1,0 +1,6 @@
+apiVersion: v2
+name: onecode-server
+description: tRPC backend for 1code Web UI
+version: 1.0.0
+appVersion: "1.0.0"
+type: application

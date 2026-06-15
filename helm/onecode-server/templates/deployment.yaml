@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "onecode-server.fullname" . }}
+  labels:
+    {{- include "onecode-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "onecode-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "onecode-server.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/part-of: onecode
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "2"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 4000
+              protocol: TCP
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            - name: HOME
+              value: "/home/claude"
+          volumeMounts:
+            - name: projects
+              mountPath: /var/lib/rancher/ansible/db
+            - name: apps
+              mountPath: /var/lib/rancher/1apps
+              readOnly: true
+            - name: claude-config
+              mountPath: /home/claude/.claude
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: projects
+          hostPath:
+            path: {{ .Values.volumes.projectsRoot }}
+            type: Directory
+        - name: apps
+          hostPath:
+            path: {{ .Values.volumes.appsRoot }}
+            type: Directory
+        - name: claude-config
+          hostPath:
+            path: {{ .Values.volumes.claudeConfig }}
+            type: Directory

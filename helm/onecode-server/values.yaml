@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: localhost/onecode-server
+  tag: rev-1
+  pullPolicy: Never
+
+service:
+  type: ClusterIP
+  port: 4000
+
+nodeSelector:
+  kubernetes.io/hostname: mgplcb05
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+env:
+  PORT: "4000"
+  CLAUDE_BIN: "/var/lib/rancher/1apps/node-v24.13.0-linux-x64/bin/claude"
+  PROJECTS_ROOT: "/var/lib/rancher/ansible/db"
+  LOG_LEVEL: "warn"
+  CORS_ORIGIN: "https://onecode.istayintek.com"
+  NODE_ENV: "production"
+
+volumes:
+  projectsRoot: /var/lib/rancher/ansible/db
+  appsRoot: /var/lib/rancher/1apps
+  claudeConfig: /home/hr1/.claude

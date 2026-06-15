@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.*
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+coverage/
+.nyc_output/
