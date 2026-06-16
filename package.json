@@ -8,18 +8,21 @@
     "dev": "tsx watch src/server.ts"
   },
   "dependencies": {
-    "@trpc/server": "^10.45.0",
-    "@fastify/websocket": "^10.0.0",
     "@fastify/cors": "^9.0.0",
+    "@fastify/websocket": "^10.0.0",
+    "@trpc/server": "^10.45.0",
     "fastify": "^4.28.0",
-    "simple-git": "^3.25.0",
-    "zod": "^3.23.0",
+    "glob": "^10.0.0",
+    "node-pty": "^1.1.0",
+    "pg": "^8.21.0",
     "pino": "^8.0.0",
-    "glob": "^10.0.0"
+    "simple-git": "^3.25.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
     "@types/node": "^20.0.0",
-    "tsx": "^4.0.0"
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.5.0"
   }
 }

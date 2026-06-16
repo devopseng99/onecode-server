@@ -13,9 +13,6 @@ nodeSelector:
   kubernetes.io/hostname: mgplcb05
 
 resources:
-  requests:
-    cpu: 200m
-    memory: 512Mi
   limits:
     cpu: "1"
     memory: 1Gi
